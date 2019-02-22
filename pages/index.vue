@@ -97,13 +97,29 @@
         const config = { headers: { 'Content-Type': `multipart/form-data` } }
 
         try {
-          const response = await this.$axios.post(url, data, config)
+          const response = await this.$axios.post(`${url}/gcpd_lookup`, data, config)
           console.log(response)
         } catch (err) {
           console.log(err)
         }
       },
-      handleSendReport(index, row) {
+      async handleSendReport(index, row) {
+        const data = new FormData()
+        const url = process.env.headLightApi
+        const apiKey = process.env.headLightApiKey
+        const image = this.$refs.upload._data.uploadFiles[0].raw
+
+        data.append("api_key", apiKey)
+        data.append("image", image)
+
+        const config = { headers: { 'Content-Type': `multipart/form-data` } }
+
+        try {
+          const response = await this.$axios.post(`${url}/gcpd_report`, data, config)
+          console.log(response)
+        } catch (err) {
+          console.log(err)
+        }
       },
       handleImageUploadChange(file) {
         this.imageUrl = URL.createObjectURL(file.raw)
